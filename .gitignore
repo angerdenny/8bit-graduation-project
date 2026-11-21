@@ -1,0 +1,24 @@
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+venv/
+venv_test/
+.venv/
+*.log
+src/ai/models/
+backup/
+
+# 수집기가 만드는 PC 고유 ID (커밋 금지)
+agent_id.txt
+
+
+# 졸업작품 배포용 제외 목록
+.downloads/
+*.bak*
+.env
+.env.*
+!.env.example
+src/backend/check_db.py
+/sim_routes.py
