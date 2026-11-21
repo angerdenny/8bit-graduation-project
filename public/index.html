@@ -9514,21 +9514,13 @@
       <button class="mg-opt" data-mode="local"><b>노트북 로컬 (전시·시연)</b><span>이 PC에서 실행 중인 서버(127.0.0.1:8000)에 접속합니다.</span></button>
       <button class="mg-opt" data-mode="cloud"><b>클라우드 (Render + Aiven)</b><span class="mg-cloud-note">준비 중입니다.</span></button>
       <button class="mg-opt" data-mode="test"><b>테스트 전용</b><span>가상 장비와 시뮬레이션 기능으로 확인합니다.</span></button>
-      <details class="mg-guide">
-        <summary>처음 실행하는 방법 (클릭)</summary>
-        <ol>
-          <li><code>src\backend</code>의 <code>.env</code>에 DB 주소, JWT_SECRET, AGENT_API_KEY를 넣습니다.</li>
-          <li>터미널 1: <code>uvicorn main:app --host 0.0.0.0 --port 8000</code></li>
-          <li>터미널 2: <code>python collector.py</code></li>
-          <li>터미널 3: <code>python pinger.py</code></li>
-          <li>이 창에서 "노트북 로컬"을 고르고 로그인합니다.</li>
-        </ol>
-        <p>자세한 내용은 README의 "실행 방법" 섹션을 보세요.</p>
-      </details>
+      <p class="mg-desc">
+        설치 방법은 <a href="https://angerdenny.github.io/8bit-graduation-project/guide.html" target="_blank" rel="noopener">설치 가이드</a>를 보세요.
+      </p>
       <label class="mg-skip"><input type="checkbox" id="mgSkip"> 다음부터 이 창 보지 않기</label>
     </div>
   </div>
-  
+
   <script>
     (function () {
       const MODE_KEY = 'netmon_mode';
