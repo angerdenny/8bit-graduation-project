@@ -202,7 +202,30 @@ exit</pre>
         <tr><td>포트 8000 사용 중</td><td><code>netstat -ano | findstr :8000</code>으로 다른 프로그램 확인</td></tr>
       </table>
     </section>
-
+<!-- 10-2. 클라우드 (선택, 준비 중) -->
+<section class="slide">
+  <h2>선택: 클라우드에 올리기 (준비 중)</h2>
+  <p class="lead">인터넷에서 누구나 접속하게 하려면 클라우드 배포가 필요합니다. 비용이 발생하므로 필요할 때만 진행하세요.</p>
+  <table>
+    <tr><th>항목</th><th>내용</th></tr>
+    <tr><td>목적</td><td>인터넷에서 누구나 접속</td></tr>
+    <tr><td>필요 비용</td><td>Aiven MySQL 유료 플랜, Render 유료 플랜 (무료는 잠들어 첫 접속이 느림)</td></tr>
+    <tr><td>필요 작업</td><td>DB 덤프 이전, Render 환경 변수 설정, 접속 주소 교체</td></tr>
+    <tr><td>현재 상태</td><td>준비 중. 이 가이드는 로컬 실행을 기준으로 합니다.</td></tr>
+  </table>
+  <div class="note">
+    <b>진행 순서 (요약)</b><br>
+    1. Aiven MySQL 서비스 생성 후 연결 정보 확보<br>
+    2. 로컬 DB를 <code>mysqldump</code>로 덤프해 Aiven에 복원 (<code>schema.sql</code>은 실제 구조와 달라 그대로 쓰지 않음)<br>
+    3. Render에 <code>DATABASE_URL</code>, <code>JWT_SECRET</code>, <code>AGENT_API_KEY</code> 등록<br>
+    4. 접속 주소와 준비 플래그 변경 후 PC의 <code>.env</code>를 클라우드용으로 바꿔 수집기 연결 테스트
+  </div>
+  <div class="note">
+    <b>주의</b><br>
+    · 클라우드에서는 <code>JWT_SECRET</code>, <code>AGENT_API_KEY</code>, DB 비밀번호를 반드시 새로 만드세요.<br>
+    · 무료 플랜은 잠들었다 깨어나므로 실시간 수집이 끊길 수 있습니다.
+  </div>
+</section>
     <!-- 11. 끝 -->
     <section class="slide">
       <h2>끝까지 오셨습니다</h2>
