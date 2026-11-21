@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8bit 졸업 작품 · 설치 가이드</title>
+<style>
+  :root { --bg:#0b0f1a; --card:#141b2d; --line:#26324d; --text:#e8edf7; --sub:#9fb0cf; --accent:#3b82f6; --ok:#22c55e; --warn:#f59e0b; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--text); font-family:"Malgun Gothic", "Apple SD Gothic Neo", sans-serif; }
+  .deck { height:100%; display:flex; flex-direction:column; }
+  header { padding:14px 24px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--line); }
+  header h1 { font-size:16px; margin:0; font-weight:700; }
+  header .count { color:var(--sub); font-size:13px; }
+  main { flex:1; overflow:auto; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .slide { display:none; width:min(1100px, 100%); background:var(--card); border:1px solid var(--line); border-radius:16px; padding:36px 40px; box-shadow:0 12px 40px rgba(0,0,0,.35); }
+  .slide.active { display:block; }
+  .slide h2 { margin:0 0 6px; font-size:26px; }
+  .slide .lead { color:var(--sub); margin:0 0 22px; font-size:15px; }
+  .slide p, .slide li { font-size:15px; line-height:1.7; }
+  .slide ol, .slide ul { padding-left:22px; }
+  .step-no { display:inline-block; background:var(--accent); color:#fff; font-weight:700; border-radius:999px; width:28px; height:28px; line-height:28px; text-align:center; margin-right:8px; font-size:13px; }
+  code { background:#0a0f1c; border:1px solid var(--line); padding:2px 6px; border-radius:6px; font-size:13px; color:#cfe0ff; font-family:Consolas, monospace; }
+  pre { background:#0a0f1c; border:1px solid var(--line); border-radius:10px; padding:14px 16px; overflow:auto; font-size:13px; line-height:1.6; font-family:Consolas, monospace; color:#cfe0ff; }
+  .note { border-left:4px solid var(--warn); background:rgba(245,158,11,.08); padding:12px 14px; border-radius:8px; margin:16px 0; font-size:14px; line-height:1.6; }
+  .ok { border-left:4px solid var(--ok); background:rgba(34,197,94,.08); padding:12px 14px; border-radius:8px; margin:16px 0; font-size:14px; line-height:1.6; }
+  figure { margin:18px 0 0; }
+  figure img { width:100%; border-radius:10px; border:1px solid var(--line); display:block; }
+  figcaption { color:var(--sub); font-size:13px; margin-top:8px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; margin-top:8px; }
+  th, td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--sub); font-weight:600; }
+  footer { display:flex; justify-content:space-between; align-items:center; padding:12px 24px; border-top:1px solid var(--line); }
+  button.nav { background:var(--accent); color:#fff; border:0; border-radius:10px; padding:10px 18px; font-size:14px; cursor:pointer; }
+  button.nav:disabled { background:#334; color:#778; cursor:not-allowed; }
+  .dots { display:flex; gap:8px; }
+  .dots button { width:10px; height:10px; border-radius:50%; border:0; background:var(--line); cursor:pointer; padding:0; }
+  .dots button.on { background:var(--accent); }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px; }
+  @media (max-width:760px) { .slide { padding:22px; } .grid2 { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<div class="deck">
+  <header>
+    <h1>8bit 졸업 작품 · AI 기반 네트워크 관리 시스템 설치 가이드</h1>
+    <span class="count" id="count"></span>
+  </header>
+
+  <main>
+    <!-- 1. 소개 -->
+    <section class="slide">
+      <h2>이 프로젝트는 무엇인가요?</h2>
+      <p class="lead">내 PC와 주변 기기의 CPU, 메모리, 트래픽을 모니터링하고, 이상 징후를 AI로 감지하는 관제 시스템입니다.</p>
+      <p>웹 대시보드에서 실시간 트래픽과 AI 위험 스코어를 보고, 장비 상태와 보안 알림을 확인할 수 있습니다. 이 가이드는 GitHub에서 코드를 받아 <b>내 PC에서 직접 실행</b>하는 순서를 설명합니다.</p>
+      <figure>
+        <img src="images/01_dashboard.png" alt="대시보드 화면">
+        <figcaption>실행이 끝나면 이런 대시보드가 나옵니다. 화면의 수치는 실행 환경마다 다릅니다.</figcaption>
+      </figure>
+      <div class="note">화면에 보이는 Mbps, 퍼센트, 장비 개수는 내 PC 상태에 따라 달라집니다. 값이 같아야 한다는 뜻은 아닙니다.</div>
+    </section>
+
+    <!-- 2. 준비물 -->
+    <section class="slide">
+      <h2>준비물</h2>
+      <p class="lead">아래 프로그램이 설치되어 있어야 합니다.</p>
+      <table>
+        <tr><th>프로그램</th><th>버전</th><th>확인 명령</th></tr>
+        <tr><td>Python</td><td>3.10 이상 권장</td><td><code>python --version</code></td></tr>
+        <tr><td>MySQL Server</td><td>8.0</td><td><code>mysql --version</code></td></tr>
+        <tr><td>Git</td><td>아무 최신 버전</td><td><code>git --version</code></td></tr>
+        <tr><td>VS Code (선택)</td><td>-</td><td>터미널 3개를 나눠 보기 편합니다</td></tr>
+      </table>
+      <div class="note">MySQL을 처음 설치한다면 <b>root 비밀번호</b>를 꼭 기억해 두세요. 뒤에서 <code>.env</code>에 넣습니다.</div>
+    </section>
+
+    <!-- 3. 코드 받기 -->
+    <section class="slide">
+      <h2><span class="step-no">1</span>코드 받기</h2>
+      <p class="lead">GitHub 저장소를 내 PC에 복제합니다.</p>
+      <pre>git clone https://github.com/angerdenny/8bit-graduation-project.git
+cd 8bit-graduation-project
+pip install -r requirements.txt</pre>
+      <p>저장소를 받으면 <code>src/backend</code> 폴더 안에서 모든 명령을 실행합니다.</p>
+      <div class="note">비밀 값(<code>.env</code>, DB 비밀번호, 키)은 저장소에 없습니다. 다음 슬라이드에서 직접 만듭니다.</div>
+    </section>
+
+    <!-- 4. .env -->
+    <section class="slide">
+      <h2><span class="step-no">2</span><code>.env</code> 파일 만들기</h2>
+      <p class="lead"><code>src/backend/.env.example</code>을 복사해서 <code>.env</code>로 이름을 바꾸고 값을 채웁니다.</p>
+      <pre>copy src\backend\.env.example src\backend\.env</pre>
+      <pre># 데이터베이스 (내 PC의 MySQL)
+DATABASE_URL=mysql+pymysql://root:여기에_DB비밀번호@127.0.0.1:3306/netmon
+
+# 인증 키 (아래 명령으로 직접 만들기)
+JWT_SECRET=여기에_생성한_값
+JWT_EXPIRE_MINUTES=720
+AGENT_API_KEY=여기에_생성한_값
+
+# 서버 주소와 수집 설정
+BACKEND_URL=http://127.0.0.1:8000
+COLLECT_DEVICE_NAME=내PC이름
+COLLECT_INTERVAL_SEC=5
+PING_TARGET=8.8.8.8</pre>
+      <p>키는 아래 명령으로 만듭니다. 두 번 실행해서 <code>JWT_SECRET</code>과 <code>AGENT_API_KEY</code>에 각각 넣으세요.</p>
+      <pre>python -c "import secrets; print(secrets.token_hex(32))"</pre>
+      <div class="note">
+        <b>주의</b><br>
+        · <code>DATABASE_URL</code>의 비밀번호에 <code>@ : / #</code>가 있으면 주소가 깨집니다. 영문과 숫자만 쓰세요.<br>
+        · <code>.env</code> 파일은 절대 GitHub에 올리거나 캡처하지 마세요.
+      </div>
+    </section>
+
+    <!-- 5. DB 준비 -->
+    <section class="slide">
+      <h2><span class="step-no">3</span>데이터베이스 준비</h2>
+      <p class="lead">MySQL에 <code>netmon</code> 데이터베이스를 만들고 테이블을 준비합니다.</p>
+      <pre>mysql -u root -p
+CREATE DATABASE netmon CHARACTER SET utf8mb4;
+exit</pre>
+      <p>그다음 저장소의 <code>schema.sql</code>을 <code>netmon</code>에 적용합니다.</p>
+      <pre>mysql -u root -p netmon &lt; schema.sql</pre>
+      <div class="note">이미 테이블이 있는 DB에 다시 적용하면 데이터가 지워질 수 있습니다. 처음 설치할 때만 실행하세요.</div>
+    </section>
+
+    <!-- 6. 서버 3개 실행 -->
+    <section class="slide">
+      <h2><span class="step-no">4</span>서버 실행: 터미널 3개</h2>
+      <p class="lead">모든 터미널은 <code>src/backend</code> 폴더에서 엽니다.</p>
+      <ol>
+        <li><b>터미널 1</b> 웹 서버: <code>uvicorn main:app --host 0.0.0.0 --port 8000</code></li>
+        <li><b>터미널 2</b> 수집기: <code>python collector.py</code></li>
+        <li><b>터미널 3</b> 핑 확인: <code>python pinger.py</code></li>
+      </ol>
+      <div class="grid2">
+        <figure>
+          <img src="images/03_terminal_uvicorn.png" alt="uvicorn 실행 화면">
+          <figcaption>① uvicorn: <code>Uvicorn running on http://0.0.0.0:8000</code>이 보이면 정상</figcaption>
+        </figure>
+        <figure>
+          <img src="images/04_terminal_collector.png" alt="collector 실행 화면">
+          <figcaption>② collector: <code>cpu=… ram=… in=…Mbps</code> 줄이 주기적으로 나오면 정상</figcaption>
+        </figure>
+      </div>
+      <figure style="max-width:600px">
+        <img src="images/05_terminal_pinger.png" alt="pinger 실행 화면">
+        <figcaption>③ pinger: <code>등록된 기기를 5초마다 핑합니다</code>가 보이면 정상</figcaption>
+      </figure>
+    </section>
+
+    <!-- 7. 접속과 모드 선택 -->
+    <section class="slide">
+      <h2><span class="step-no">5</span>브라우저 접속과 실행 방식 선택</h2>
+      <p class="lead">서버가 켜졌으면 브라우저에서 주소를 엽니다.</p>
+      <pre>http://127.0.0.1:8000/</pre>
+      <p>처음 들어가면 <b>실행 방식 선택 창</b>이 뜹니다. 내 PC에서 직접 실행했다면 아래를 고르세요.</p>
+      <table>
+        <tr><th>선택</th><th>언제 고르나</th></tr>
+        <tr><td><b>노트북 로컬</b></td><td>지금 설명한 방식 그대로 내 PC에서 실행할 때 (대부분 이걸 고르면 됩니다)</td></tr>
+        <tr><td>클라우드 (Render + Aiven)</td><td>인터넷 서버로 배포한 경우 (준비 중)</td></tr>
+        <tr><td>테스트 전용</td><td>가상 장비와 시뮬레이션만 확인하고 싶을 때</td></tr>
+      </table>
+      <div class="ok">"다음부터 이 창 보지 않기"를 체크하면 다음 방문부터 바로 들어갑니다.</div>
+    </section>
+
+    <!-- 8. 로그인과 장비 연결 -->
+    <section class="slide">
+      <h2><span class="step-no">6</span>로그인과 내 PC 연결</h2>
+      <p class="lead">계정을 만들고 로그인한 뒤, 내 PC를 장비로 등록합니다.</p>
+      <ol>
+        <li>회원가입 후 로그인합니다.</li>
+        <li>관리자 화면에서 <b>내 PC 연결</b>을 누르고 표시되는 연결 코드를 입력합니다.</li>
+        <li>연결이 끝나면 collector 창에 <code>연결 완료 (device_id=…)</code>가 나옵니다.</li>
+        <li>대시보드 장비 목록에 내 PC 이름이 보이면 성공입니다.</li>
+      </ol>
+      <div class="note">연결 코드는 <b>30분 안에</b> 입력해야 합니다. 지나면 collector를 다시 실행해 새 코드를 받으세요.</div>
+    </section>
+
+    <!-- 9. 완료 화면 -->
+    <section class="slide">
+      <h2><span class="step-no">7</span>정상 동작 확인</h2>
+      <p class="lead">아래가 보이면 설치가 끝난 것입니다.</p>
+      <figure>
+        <img src="images/01_dashboard.png" alt="정상 동작 중인 대시보드">
+        <figcaption>실시간 트래픽 차트가 움직이고, 장비 상태에 Online 수가 보이면 정상입니다.</figcaption>
+      </figure>
+    </section>
+
+    <!-- 10. 문제 해결 -->
+    <section class="slide">
+      <h2>자주 막히는 곳</h2>
+      <p class="lead">증상별로 확인할 것만 정리했습니다.</p>
+      <table>
+        <tr><th>증상</th><th>확인할 것</th></tr>
+        <tr><td><code>AGENT_API_KEY가 .env에 없습니다</code></td><td><code>.env</code>가 <code>src/backend</code> 안에 있는지, 이름이 정확히 <code>.env</code>인지 확인</td></tr>
+        <tr><td>DB 연결 오류 (Access denied)</td><td><code>DATABASE_URL</code>의 root 비밀번호가 MySQL과 같은지 확인</td></tr>
+        <tr><td>collector에서 전송 실패 (500)</td><td>uvicorn 창의 마지막 에러 줄을 확인. DB 테이블이 없으면 <code>schema.sql</code> 적용</td></tr>
+        <tr><td>대시보드가 0 Mbps, 데이터 없음</td><td>collector가 계속 <code>cpu=…</code>를 찍는지 확인하고 브라우저를 <code>Ctrl+F5</code>로 새로고침</td></tr>
+        <tr><td>연결 코드 실패</td><td>코드가 30분 넘었는지 확인하고 collector를 재실행</td></tr>
+        <tr><td>모드 선택 창이 안 뜸</td><td>콘솔(F12)에서 <code>openModePicker()</code> 실행</td></tr>
+        <tr><td>포트 8000 사용 중</td><td><code>netstat -ano | findstr :8000</code>으로 다른 프로그램 확인</td></tr>
+      </table>
+    </section>
+
+    <!-- 11. 끝 -->
+    <section class="slide">
+      <h2>끝까지 오셨습니다</h2>
+      <p class="lead">막히는 곳이 있으면 저장소의 Issues에 남겨 주세요.</p>
+      <ul>
+        <li>프로젝트 설명: 저장소의 <code>README.md</code></li>
+        <li>발표 자료와 구조: <code>EXHIBITION.md</code></li>
+      </ul>
+      <p>직접 만든 기능을 추가해 보는 것도 좋은 공부가 됩니다. 즐거운 실습 되세요.</p>
+    </section>
+  </main>
+
+  <footer>
+    <button class="nav" id="prev">← 이전</button>
+    <div class="dots" id="dots"></div>
+    <button class="nav" id="next">다음 →</button>
+  </footer>
+</div>
+
+<script>
+(function () {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dots = document.getElementById('dots');
+  const count = document.getElementById('count');
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  let idx = 0;
+
+  slides.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.setAttribute('aria-label', (i + 1) + '번 슬라이드');
+    b.addEventListener('click', () => show(i));
+    dots.appendChild(b);
+  });
+
+  function show(i) {
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('active', k === idx));
+    Array.from(dots.children).forEach((d, k) => d.classList.toggle('on', k === idx));
+    count.textContent = (idx + 1) + ' / ' + slides.length;
+    prev.disabled = idx === 0;
+    next.disabled = idx === slides.length - 1;
+    history.replaceState(null, '', '#' + (idx + 1));
+    document.querySelector('main').scrollTop = 0;
+  }
+
+  prev.addEventListener('click', () => show(idx - 1));
+  next.addEventListener('click', () => show(idx + 1));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') show(idx + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(idx - 1);
+  });
+
+  const start = parseInt(location.hash.slice(1), 10);
+  show(isNaN(start) ? 0 : start - 1);
+})();
+</script>
+</body>
+</html>
